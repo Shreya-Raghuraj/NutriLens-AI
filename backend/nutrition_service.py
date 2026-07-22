@@ -10,28 +10,48 @@ USDA_API_KEY = os.getenv("USDA_API_KEY")
 def search_food(food_name):
     url = "https://api.nal.usda.gov/fdc/v1/foods/search"
 
+    # Clean up food name for better USDA search
+    cleaned_name = (
+        food_name.replace("/", " ")
+        .replace("-", " ")
+        .strip()
+    )
+
     params = {
-        "query": food_name,
+        "query": cleaned_name,
         "api_key": USDA_API_KEY,
         "pageSize": 1,
     }
 
-    response = requests.get(url, params=params)
-    response.raise_for_status()
+    try:
+        response = requests.get(url, params=params)
+        response.raise_for_status()
 
-    data = response.json()
+        data = response.json()
 
-    if not data.get("foods"):
+        if not data.get("foods"):
+            print(f"No USDA results found for: {cleaned_name}")
+            return None
+
+        return data["foods"][0]
+
+    except requests.exceptions.RequestException as e:
+        print(f"USDA API Error: {e}")
         return None
-
-    return data["foods"][0]
 
 
 def calculate_nutrition(food_name, weight_g):
     food = search_food(food_name)
 
     if not food:
-        return None
+        return {
+            "name": food_name,
+            "estimated_weight_g": weight_g,
+            "calories": 0,
+            "protein_g": 0,
+            "carbs_g": 0,
+            "fat_g": 0,
+        }
 
     nutrients = {
         "calories": 0,
@@ -52,7 +72,7 @@ def calculate_nutrition(food_name, weight_g):
         elif "carbohydrate" in name:
             nutrients["carbs"] = nutrient.get("value", 0)
 
-        elif "total lipid" in name or "fat" == name:
+        elif "total lipid" in name or name == "fat":
             nutrients["fat"] = nutrient.get("value", 0)
 
     factor = weight_g / 100
