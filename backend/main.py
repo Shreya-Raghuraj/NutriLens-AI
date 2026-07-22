@@ -13,9 +13,14 @@ UPLOAD_DIR.mkdir(exist_ok=True)
 
 app = FastAPI(title="NutriLens AI")
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5174"],
+    allow_origins=[
+        "http://localhost:5173",
+        "https://nutri-lens-ai-nu.vercel.app",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
