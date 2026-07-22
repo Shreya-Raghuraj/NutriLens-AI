@@ -27,11 +27,11 @@ function ChatInput({
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8001/coach",
-        {
-          message,
-        }
-      );
+  "https://nutrilens-ai-igp4.onrender.com/coach",
+  {
+    message,
+  }
+);
 
       setMessages((prev) => [
         ...prev,

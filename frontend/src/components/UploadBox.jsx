@@ -43,14 +43,14 @@ function UploadBox() {
       formData.append("file", image.file);
 
       const response = await axios.post(
-        "http://127.0.0.1:8001/analyze-meal",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+  "https://nutrilens-ai-igp4.onrender.com/analyze-meal",
+  formData,
+  {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  }
+);
 
       // Current meal
       localStorage.setItem(

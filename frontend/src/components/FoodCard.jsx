@@ -25,7 +25,7 @@ function FoodCard({ food }) {
       <div className="flex flex-wrap gap-3">
 
         <div className="rounded-full bg-slate-800 px-4 py-2 text-sm">
-          💪 <span className="font-semibold">{food.protein_g} g</span>
+          <span className="font-semibold">{food.protein_g} g</span>
         </div>
 
         <div className="rounded-full bg-slate-800 px-4 py-2 text-sm">
